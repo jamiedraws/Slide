@@ -1,174 +1,235 @@
-# Using BEM to Communicate CSS Solutions
+# Slide
 
-## The Next Guy's Problem
+## Setup
 
-Let's imagine we're putting together a header on a webpage. What can I put inside of a header? Let's start with something simple, like a logo and a title. So, let's imagine what this could look like in HTML.
+## Carousel
 
-```html
-<header>
-	<img src="logo.svg" />
-	<h1>Title of the website</h1>
-</header>
-```
+### HTML
 
-Now, let's imagine what my CSS would look like.
-
-```css
-header {
-}
-
-header img {
-}
-
-header h1 {
-}
-```
-
-### I'm That Guy...
-
-Sure, I could get by with this alone. However, header elements can be used to describe other relationships besides the website itself. For instance, I could use a header element to describe the header of an article or a quote or a sidebar. Imagine these headers having a different look and feel.
-
-The CSS I've written for the main header will also affect those other headers, whcih I probably don't want. This is where you'd start thinking about using classes to solve the problem, right?
-
-```css
-.header {
-}
-
-.header-logo {
-}
-
-.header-title {
-}
-```
-
-Okay, now my CSS is separated from my HTML so I can choose which headers I want my styling to apply to.
-
-Imagine our website has two headers that look very similar to one another but are just colored differently. You're probably thinking about using the same classes to handle most of the work, right? Okay, so say I do that. Now, they look exactly the same. So, how can I change the color for this other header?
-
-Maybe, I just write another class that's supposed to overwrite the default styling.
-
-```css
-.header {
-}
-
-.header-logo {
-}
-
-.header-title {
-}
-
-.header-dark-theme {
-}
-```
-
-My `.header-dark-theme` class can override the default styling. I know this problem I'm trying to solve and I know exactly where to put it. I've figure it out, now I'm done and I can move on.
-
-### You're the Next Guy!
-
-6 months later, let's say you come along and maintain my css and you see these styles. You have to style another header similar to this but the HTML has been removed so you can't see how it was implemented before.
-
-Sooooo, forget the HTML. Okay, maybe you can just ask me, right? Nope. I took a PTO day, I'm somewhere where internet is pretty spotty so who knows when I'll see your text. Now ask youself, where the heck do you put these classes? Where was the `.header-dark-theme` supposed to go?
-
-If you don't know, are you likely to go and change my CSS? What if your changes to my code break something else? Well, you're probably going to decide it's just easier to style it from scratch, right?
-
-Now, you've solved your problem, you're done and ready to move on buuuuut, this website still lives on. So, what about the next guy that will look at both your code and my code 6 months from now and have to maintain that?
-
-What do you think the next guy is going to do?
-
-## Is it CSS or is it my Names?
-
-CSS is simple to write but it's hard to maintain. That's just for yourself if you end up being the next guy on your own project. For our peers, there's an even bigger problem - the communication.
-
-It's not so much CSS that's at fault. It's more-so how we're writing it that can either speak clear or speak cryptic for the next guy. We have to always think of the next guy!
-
-### The CSS That Lies
-
-Let's take another look at my CSS solution for the header.
-
-```css
-.header {
-}
-
-.header-logo {
-}
-
-.header-title {
-}
-
-.header-dark-theme {
-}
-```
-
-So, my HTML looks like this with my `.header` classes applied.
+To set up a working carousel on your webpage, let's start by adding our HTML code right into the webpage, wherever you'd like to display the carousel.
 
 ```html
-<header class="header header-dark-theme">
-	<img class="header-logo" src="logo.svg" />
-	<h1 class="header-title">Title of the website</h1>
-</header>
+<div class="slide">
+	<div id="alpha" class="slide__into">
+		<img
+			id="alpha-0"
+			src="https://cdn2.thecatapi.com/images/5q5.jpg"
+			class="slide__item"
+		/>
+		<img
+			id="alpha-1"
+			src="https://cdn2.thecatapi.com/images/b8.png"
+			class="slide__item"
+		/>
+		<img
+			id="alpha-2"
+			src="https://cdn2.thecatapi.com/images/9qc.jpg"
+			class="slide__item"
+		/>
+	</div>
+</div>
 ```
 
-The names make sense and they're clear. They're all a part of the header, right? How could anyone possibly mess this up?
+What you'll need in order for the carousel to work are the following:
 
-Now, what if the next guy had to rewrite the HTML from scratch but applied the classes like this?
+| Classes               | Description                                                                                                                           |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `class="slide"`       | This is used to hold the carousel along with any controls such as navigational buttons or thumbnails.                                 |
+| `class="slide__into"` | This is used to hold all of the slides in the carousel. This namespace should be used as a descendant of the `class="slide"` element. |
+| `class="slide__item"` | This is used to identify each slide. This namespace should be used as a direct child of the `class="slide__into"` element.            |
+
+### CSS
+
+Secondly, let's link to `slide.css` using the following link element.
 
 ```html
-<header class="header">
-	<img class="header-logo header-dark-theme" src="logo.svg" />
-	<h1 class="header-title header-dark-theme">Title of the website</h1>
-</header>
+<link rel="stylesheet" href="slide/css/slide.css" />
 ```
 
-### R.I.P.
+This stylesheet is responbile for providng strucutre to the carousel. Depending on where your carousel lives on your webpage should decide whether this stylesheet needs to go in the `<head>` tag or in the `<body>`.
 
-Why would the next guy do something like this? It's rather quite simple, really. Between, `.header-logo`, `.header-title` and `.header-dark-theme`, they all look like they have a relationship with the `.header` class, right?
+If the carousel HTML is parsed before this stylesheet is parsed, the webpage may incur layout shifting.
 
-> So you mean to tell me, if I want a dark theme... I have to put this shit on every single tag? Give me a break.
+### Result
 
-That's the assumption the next guy is going to make... and he's not wrong. He just didn't know how to use it and he couldn't rely on me or you for guidance. So, what are the chances this is going to break something? Say it did, then what does the next guy do? Think he's going to risk getting burned again?
+With the boilerplate carousel HTML and the `slide.css` stylesheet added, the carousel should be scrollable from the first slide to the last slide.
 
-CSS shouldn't be this hard.... and it doesn't have to be.
+This is a low-level primitive where the only functionality it offers is to simply scroll. It doesn't require any other stylesheets or JavaScript to function.
 
-## Making Sense with BEM
+You may progressively enhance the carousel by using additional stylesheets and JavaScript.
 
-Let's say I want to start thinking about the next guy... that next guy could also be future me, okay? How can I clearly communicate what my CSS is supposed to do?
+## Thumbnails
 
-Maybe, I could use [BEM](http://getbem.com/ "Read more about what BEM is on their documentation website") to name my classes.
+### HTML
 
-```css
-.header {
-}
-
-.header__logo {
-}
-
-.header__title {
-}
-
-.header--dark-theme {
-}
-```
-
-Now let's break this down. What does this mean?
-
-`.header` is my module. It's the very thing I'm styling the header with. It is the **B** in B.E.M. _a.k.a. the block_.
-
-`.header__logo` and `.header__title` are the children of `.header`, the parent. The `__` _(double underscore)_ means there is a clear parent to child relationship. It is the **E** in B.E.M. _a.k.a. the element_.
-
-`.header--dark-theme` is not a child of `.header` at all. Instead, it is an extension or modifier of `.header` itself. If `.header` is the parent, then think of `.header--dark-theme` as the aunt. That's what the `--` _(double hyphen)_ means. It is the **M** in B.E.M. _a.k.a. the modifier_.
-
-Again, if we're looking at this as if it were a family tree, the `__` symbol means the child of the parent module, while the `--` symbol means sibling of the parent module. Creating structure that can communicate clearly is the whole point of BEM.
+Let's start by adding the HTML template that will lay out the thumbnails to our carousel.
 
 ```html
-<header class="header header--dark-theme">
-	<img class="header__logo" src="logo.svg" />
-	<h1 class="header__title">Title of the website</h1>
-</header>
+<nav class="slide__thumbnails">
+	<a href="#alpha-0" class="slide__thumbnail" data-slide-index="0">
+		<img src="https://cdn2.thecatapi.com/images/5q5.jpg" />
+	</a>
+	<a href="#alpha-1" class="slide__thumbnail" data-slide-index="1">
+		<img src="https://cdn2.thecatapi.com/images/b8.png" />
+	</a>
+	<a href="#alpha-2" class="slide__thumbnail" data-slide-index="2">
+		<img src="https://cdn2.thecatapi.com/images/9qc.jpg" />
+	</a>
+</nav>
 ```
 
-This idea of family and these two symbols is a simple idea our team can understand and make sense of. If we all practice this, our CSS has a better chance to communicate with our peers, exactly what it's meant to do.
+With just semantic HTML and CSS alone, the thumbnails should link to each slide by it's unique id. What you'll need in order for the thumbnails to work are the following:
 
-If the next guy understands what your CSS or my CSS does, instead of creating problems, it can create opportunities in that the next guy can maintain the code by:
+| Classes                     | Description                                                                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `class="slide__thumbnails"` | This is used to hold the thumbnails. This namespace should be used as a descendant of the `class="slide"` element.                         |
+| `class="slide__thumbnail"`  | This is used to hold the individual thumbnail. This namespace should be used as a direct child of the `class="slide__thumbnails"` element. |
 
--   Introducing new elements to the block
--   Extending the block with a modifier
+| Attributes                                        | Description                                                                                                                                                    | Example                |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `id="{Replace With Unique ID}"`                   | This is used to identify each slide. Replace `{Replace With Unique ID}` with your own unique ID.                                                               | `id="alpha-0"`         |
+| `href="#{Replace With Matching ID}"`              | This is used to link the thumbnail to the slide. Replace `{Replace With Matching ID}` with the matching ID of the slide.                                       | `href="#alpha-0"`      |
+| `data-slide-index="{Replace With Unique Number}"` | This is used to identify each slide based on it's index value. It is required to include this attribute when `slide.js` and `slide.thumbnails.js` is involved. | `data-slide-index="0"` |
+
+### CSS
+
+Secondly, let's link to `slide.thumbnails.css` using the following link element.
+
+```html
+<link rel="stylesheet" href="slide/css/components/slide.thumbnails.css" />
+```
+
+### Result
+
+Let's test by interacting with the thumbnails. What should happen is if you interact with a thumbnail that isn't already showing the slide on screen, the slide should then display on screen using simple jump-link behavior.
+
+## Progressive Enhacement
+
+### HTML
+
+Let's add a `<noscript>` element right after the `<link>` elements that request `slide.css` and `.slide.thumbnails.css`.
+
+```html
+<noscript>
+	<style>
+		.slide__js {
+			display: none;
+		}
+	</style>
+</noscript>
+```
+
+This allows graceful degradation for our carousel whenever a user has JavaScript disabled in their browser and hides any links/buttons that would only work if JavaScript is enabled.
+
+### JavaScript
+
+Let's request the `slide.js` script into our HTML file. The script is not a critical resource so we can add the `<script>` at the bottom of the HTML document.
+
+Secondly, let's request the `slide.thumbnails.js` script into the HTML document. Add the script right after the `slide.js` script.
+
+Finally, let's create a new JavaScript file and add to the HTML document. You can name this file whatever you'd like - for this tutorial, I'm going to name it `my-carousel.js`.
+
+```html
+<script defer src="slide/js/slide.js"></script>
+<script defer src="slide/js/components/slide.thumbnails.js"></script>
+<script defer src="js/my-carousel.js"></script>
+```
+
+| Attributes | Description                                                                                                                                             |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defer`    | This is used to hint to the browser that it can defer the downloading of the JavaScript files until after the HTML document has been completely parsed. |
+
+## Controls
+
+### HTML
+
+Let's start by adding the HTML template that will display our next and previous buttons.
+
+```html
+<nav class="slide__nav slide__js">
+	<button class="slide__prev" type="button">
+		Prev
+	</button>
+	<button class="slide__play" type="button">
+		Play
+	</button>
+	<button class="slide__pause" type="button">
+		Pause
+	</button>
+	<button class="slide__next" type="button">
+		Next
+	</button>
+</nav>
+```
+
+By adding a `<nav>` element with `<button>` elements, we're describing a navigation of buttons. Unlike the thumbnails, we don't need to use `<a>` to link directly to a slide by it's unique ID. Instead, we will use JavaScript to control the carousel through the `Slide.into` method.
+
+| Classes                | Description                                                                                                                                    |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `class="slide__nav"`   | This is used to hold the buttons that will control the carousel. This namespace should be used as a descendant of the `class="slide"` element. |
+| `class="slide__prev"`  | This is used to identify the previous button. This namespace should be used as a descendant of the `class="slide"` element.                    |
+| `class="slide__next"`  | This is used to identify the next button. This namespace should be used as a descendant of the `class="slide"` element.                        |
+| `class="slide__play"`  | This is used to identify the play button. This namespace should be used as a descendant of the `class="slide"` element.                        |
+| `class="slide__pause"` | This is used to identify the pause button. This namespace should be used as a descendant of the `class="slide"` element.                       |
+
+| Attributes      | Description                                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------------------------- |
+| `type="button"` | This is used to describe the button's behavior. It should not submit a form or prevent it's default behavior. |
+
+### JavaScript
+
+Next, let's open the `my-carousel.js` JavaScript file and let's add the template.
+
+```javascript
+Slide.into(
+	document.querySelector(".slide__into"),
+	{
+		prevButton: document.querySelector(".slide__prev"),
+		nextButton: document.querySelector(".slide__next"),
+		playButton: document.querySelector(".slide__play"),
+		pauseButton: document.querySelector(".slide__pause"),
+		thumbnails: document.querySelector(".slide__thumbnails")
+	},
+	function() {
+		const self = this;
+
+		self.prevButton.addEventListener("click", function() {
+			self.prev();
+		});
+
+		self.nextButton.addEventListener("click", function() {
+			self.next();
+		});
+
+		self.playButton.addEventListener("click", function() {
+			self.play();
+		});
+
+		self.pauseButton.addEventListener("click", function() {
+			self.pause();
+		});
+
+		self.thumbnails.addEventListener("click", function(event) {
+			event.preventDefault();
+			const thumbnail = event.target;
+			const index = parseInt(thumbnail.dataset.slideIndex);
+			self.goto(index);
+		});
+
+		self.watch(function(index, finish) {
+			self.selectThumbnail(index);
+			finish();
+		});
+	}
+);
+```
+
+### Result
+
+The carousel should now be able to:
+
+-   Play through each slide automatically using the `play` button
+-   Pause on the current slide using the `pause` button
+-   Forward to the next slide using the `next` button
+-   Reverse to the last slide using the `prev` button
+-   Jump to a specific slide using the `thumbnail` buttons
