@@ -1,6 +1,4 @@
-# Slide
-
-## Setup
+# Setup
 
 ## Carousel
 
@@ -15,16 +13,19 @@ To set up a working carousel on your webpage, let's start by adding our HTML cod
 			id="alpha-0"
 			src="https://cdn2.thecatapi.com/images/5q5.jpg"
 			class="slide__item"
+			alt="A cute kitty cat"
 		/>
 		<img
 			id="alpha-1"
 			src="https://cdn2.thecatapi.com/images/b8.png"
 			class="slide__item"
+			alt="A cute kitty cat"
 		/>
 		<img
 			id="alpha-2"
 			src="https://cdn2.thecatapi.com/images/9qc.jpg"
 			class="slide__item"
+			alt="A cute kitty cat"
 		/>
 	</div>
 </div>
@@ -46,17 +47,17 @@ Secondly, let's link to `slide.css` using the following link element.
 <link rel="stylesheet" href="slide/css/slide.css" />
 ```
 
-This stylesheet is responbile for providng strucutre to the carousel. Depending on where your carousel lives on your webpage should decide whether this stylesheet needs to go in the `<head>` tag or in the `<body>`.
+This stylesheet is responbile for providng strucutre to the carousel. Depending on where your carousel lives on your webpage should decide whether this stylesheet needs to go in the `<head>` or in the `<body>` element.
 
-If the carousel HTML is parsed before this stylesheet is parsed, the webpage may incur layout shifting.
+If the HTML is parsed before this stylesheet is parsed, the webpage may incur layout shifting.
 
 ### Result
 
-With the boilerplate carousel HTML and the `slide.css` stylesheet added, the carousel should be scrollable from the first slide to the last slide.
+With the HTML template and the `slide.css` stylesheet added, the carousel should be scrollable from the first slide to the last slide.
 
-This is a low-level primitive where the only functionality it offers is to simply scroll. It doesn't require any other stylesheets or JavaScript to function.
+This is the basic functionality the carousel has to offer. It doesn't require any other stylesheets or JavaScript to function.
 
-You may progressively enhance the carousel by using additional stylesheets and JavaScript.
+However, you may progressively enhance the carousel by using additional stylesheets and JavaScript.
 
 ## Thumbnails
 
@@ -66,19 +67,43 @@ Let's start by adding the HTML template that will lay out the thumbnails to our 
 
 ```html
 <nav class="slide__thumbnails">
-	<a href="#alpha-0" class="slide__thumbnail" data-slide-index="0">
-		<img src="https://cdn2.thecatapi.com/images/5q5.jpg" />
+	<a
+		href="#alpha-0"
+		class="slide__thumbnail"
+		title="Select the first slide"
+		data-slide-index="0"
+	>
+		<img
+			src="https://cdn2.thecatapi.com/images/5q5.jpg"
+			alt="A cute kitty cat"
+		/>
 	</a>
-	<a href="#alpha-1" class="slide__thumbnail" data-slide-index="1">
-		<img src="https://cdn2.thecatapi.com/images/b8.png" />
+	<a
+		href="#alpha-1"
+		class="slide__thumbnail"
+		title="Select the second slide"
+		data-slide-index="1"
+	>
+		<img
+			src="https://cdn2.thecatapi.com/images/b8.png"
+			alt="A cute kitty cat"
+		/>
 	</a>
-	<a href="#alpha-2" class="slide__thumbnail" data-slide-index="2">
-		<img src="https://cdn2.thecatapi.com/images/9qc.jpg" />
+	<a
+		href="#alpha-2"
+		class="slide__thumbnail"
+		title="Select the last slide"
+		data-slide-index="2"
+	>
+		<img
+			src="https://cdn2.thecatapi.com/images/9qc.jpg"
+			alt="A cute kitty cat"
+		/>
 	</a>
 </nav>
 ```
 
-With just semantic HTML and CSS alone, the thumbnails should link to each slide by it's unique id. What you'll need in order for the thumbnails to work are the following:
+With just semantic HTML and CSS alone, the thumbnails should link to each slide by it's unique ID. What you'll need in order for the thumbnails to work are the following:
 
 | Classes                     | Description                                                                                                                                |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -101,7 +126,11 @@ Secondly, let's link to `slide.thumbnails.css` using the following link element.
 
 ### Result
 
-Let's test by interacting with the thumbnails. What should happen is if you interact with a thumbnail that isn't already showing the slide on screen, the slide should then display on screen using simple jump-link behavior.
+Let's test by interacting with the thumbnails. What should happen is if you interact with a thumbnail that isn't already showing the slide on screen, the slide should then display on screen using native browser semantics.
+
+> Describing the relationship for each thumbnail `<a>` element allows a user to understand what their action would do. [This meets the success criterion for WCAG 4.1.2 Name, Role, Value - Level A](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html "Read the full definition of Name, Role, Value Success Criterion").
+
+> Users can also tab through each thumbnail with their keyboard and select a slide to display without the use of a mouse. [This functionality meets the success criterion for WCAG 2.2.1. Keyboard - Level A](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html "Read the full definition of Keyboard Success Criterion").
 
 ## Progressive Enhacement
 
@@ -121,13 +150,15 @@ Let's add a `<noscript>` element right after the `<link>` elements that request 
 
 This allows graceful degradation for our carousel whenever a user has JavaScript disabled in their browser and hides any links/buttons that would only work if JavaScript is enabled.
 
+> As a user-experience best practice, never offer the user any feature they cannot use.
+
 ### JavaScript
 
-Let's request the `slide.js` script into our HTML file. The script is not a critical resource so we can add the `<script>` at the bottom of the HTML document.
+Let's request the `slide.js` script into our HTML document. The script is not a critical resource so we can add the `<script>` at the bottom of the document.
 
 Secondly, let's request the `slide.thumbnails.js` script into the HTML document. Add the script right after the `slide.js` script.
 
-Finally, let's create a new JavaScript file and add to the HTML document. You can name this file whatever you'd like - for this tutorial, I'm going to name it `my-carousel.js`.
+Finally, let's create a new JavaScript file and add to the HTML document. You can name this file whatever you'd like - for this example, let's name it `my-carousel.js`.
 
 ```html
 <script defer src="slide/js/slide.js"></script>
@@ -143,20 +174,24 @@ Finally, let's create a new JavaScript file and add to the HTML document. You ca
 
 ### HTML
 
-Let's start by adding the HTML template that will display our next and previous buttons.
+Let's start by adding the HTML template that will display the basic controls for a carousel.
 
 ```html
 <nav class="slide__nav slide__js">
-	<button class="slide__prev" type="button">
+	<button title="Select the previous slide" class="slide__prev" type="button">
 		Prev
 	</button>
-	<button class="slide__play" type="button">
+	<button title="Play through all slides" class="slide__play" type="button">
 		Play
 	</button>
-	<button class="slide__pause" type="button">
+	<button
+		title="Pause on the current slide"
+		class="slide__pause"
+		type="button"
+	>
 		Pause
 	</button>
-	<button class="slide__next" type="button">
+	<button title="Select the next slide" class="slide__next" type="button">
 		Next
 	</button>
 </nav>
@@ -193,22 +228,27 @@ Slide.into(
 	function() {
 		const self = this;
 
+		// add support for previous slide button
 		self.prevButton.addEventListener("click", function() {
 			self.prev();
 		});
 
+		// add support for next slide button
 		self.nextButton.addEventListener("click", function() {
 			self.next();
 		});
 
+		// add support for autoplay button
 		self.playButton.addEventListener("click", function() {
 			self.play();
 		});
 
+		// add support for pause button
 		self.pauseButton.addEventListener("click", function() {
 			self.pause();
 		});
 
+		// add support for thumbnail button
 		self.thumbnails.addEventListener("click", function(event) {
 			event.preventDefault();
 			const thumbnail = event.target;
@@ -216,6 +256,7 @@ Slide.into(
 			self.goto(index);
 		});
 
+		// display selected thumbnail by CSS class name
 		self.watch(function(index, finish) {
 			self.selectThumbnail(index);
 			finish();
@@ -233,3 +274,9 @@ The carousel should now be able to:
 -   Forward to the next slide using the `next` button
 -   Reverse to the last slide using the `prev` button
 -   Jump to a specific slide using the `thumbnail` buttons
+
+> Describing controls using the `<button>` element allows a user to operate the controls using a keyboard alone. They can navigate each button using a tab key and select the button using an enter key. [This functionality meets the success criterion for WCAG 2.2.1. Keyboard - Level A](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html "Read the full definition of Keyboard Success Criterion").
+
+> Offering a control to `pause` a carousel that autoplays allows a user to consume content without being restricted to a time limit. [This functionality meets the success criterion for WCAG 2.2.2. Pause, Stop, Hide - Level A](https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html "Read the full definition of Pause, Stop, Hide Success Criterion").
+
+>

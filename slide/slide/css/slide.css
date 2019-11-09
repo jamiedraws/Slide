@@ -4,7 +4,7 @@
 
 .slide__into {
   --slide-pos: 0;
-  --slide-delay: 2000;
+  --slide-delay: 5000;
   --slide-duration: 250ms;
   --slide-easing: ease-in-out;
   -webkit-animation-iteration-count: 2000;
