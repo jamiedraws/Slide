@@ -289,6 +289,14 @@ Slide.into(
 );
 ```
 
+The `Slide.into` method takes the HTML element that represents the carousel and observes it.
+
+| Parameters     | Description                                                                                                                                                                                                                                        | Status   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `Node Element` | This node element must represent the carousel itself. It does not need to represent the carousel's slides, nor the carousel's navigational controls.                                                                                               | Required |
+| `Object`       | This object is used to initialize any properties or methods that share a relationship with a carousel. It will be attached to the carousel object and it can be accessible from the callback function.                                             | Required |
+| `Function`     | This function is used to interact with the carousel object and program the desired functionality. In this function scope also is the carousel API where properties or methods that are defined using the `Slide.proto` method are also accessible. | Required |
+
 ## Result
 
 The carousel should now be able to:
@@ -302,7 +310,7 @@ The carousel should now be able to:
 > ### Accessibility Tip
 >
 > Describing controls using the `<button>` element allows a user to operate the controls using a keyboard alone. They can navigate each button using a tab key and select the button using an enter key. [This functionality meets the success criterion for WCAG 2.2.1. Keyboard - Level A](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html "Read the full definition of Keyboard Success Criterion").
-
-> ### Acccessibility Tip
+>
+> ---
 >
 > Offering a control to `pause` a carousel that autoplays allows a user to consume content without being restricted to a time limit. [This functionality meets the success criterion for WCAG 2.2.2. Pause, Stop, Hide - Level A](https://www.w3.org/WAI/WCAG21/Understanding/pause-stop-hide.html "Read the full definition of Pause, Stop, Hide Success Criterion").
