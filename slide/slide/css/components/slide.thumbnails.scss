@@ -36,7 +36,9 @@
 	/* can set the flex basis to customize the grid */
 	flex: 1 1 20%;
 
-	display: inline-block;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
 	border: 0.05rem solid;
 	background: transparent;
 	border-color: inherit;
@@ -45,6 +47,7 @@
 	height: 5em;
 	padding: 0;
 	position: relative;
+	text-decoration: none;
 
 	&::before {
 		background: rgba(0, 0, 0, 0.2);

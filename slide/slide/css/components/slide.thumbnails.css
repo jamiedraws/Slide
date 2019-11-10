@@ -1,12 +1,7 @@
 .slide__thumbnails {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: start;
-      -ms-flex-align: start;
-          align-items: flex-start;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .slide__thumbnails--disable .slide__thumbnail {
@@ -17,8 +12,7 @@
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+  flex-wrap: nowrap;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
@@ -33,16 +27,15 @@
 }
 
 .slide__thumbnails--scroll > .slide__thumbnail {
-  -ms-flex-negative: 0;
-      flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 .slide__thumbnail {
   /* can set the flex basis to customize the grid */
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 20%;
-          flex: 1 1 20%;
-  display: inline-block;
+  flex: 1 1 20%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   border: 0.05rem solid;
   background: transparent;
   border-color: inherit;
@@ -51,6 +44,7 @@
   height: 5em;
   padding: 0;
   position: relative;
+  text-decoration: none;
 }
 
 .slide__thumbnail::before {
@@ -62,7 +56,6 @@
   opacity: 0;
   right: 0;
   bottom: 0;
-  -webkit-transition: opacity 0.3s ease-out;
   transition: opacity 0.3s ease-out;
   z-index: 1;
 }

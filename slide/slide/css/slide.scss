@@ -1,5 +1,5 @@
 .slide {
-	max-width: 300px;
+	$this: &;
 
 	&__into {
 		--slide-pos: 0;
@@ -9,11 +9,9 @@
 		animation-iteration-count: 2000;
 		counter-increment: 0;
 
-		height: 300px;
+		margin: 0.25rem;
 		border-color: #252525;
 		contain: content;
-		overflow-x: scroll;
-		overflow-y: hidden;
 
 		display: flex;
 		align-items: flex-start;
@@ -24,9 +22,15 @@
 		scroll-snap-points-x: repeat(100%);
 		scroll-snap-type: mandatory;
 		-ms-overflow-style: -ms-autohiding-scrollbar;
+		overflow-x: scroll;
+		overflow-y: hidden;
 
 		-webkit-backface-visibility: hidden;
 		backface-visibility: hidden;
+
+		&--no-scroll {
+			overflow: hidden;
+		}
 	}
 
 	&__item {

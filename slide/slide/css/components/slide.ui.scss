@@ -1,0 +1,57 @@
+$foreground: #252525;
+$background: #ededed;
+
+.slide {
+	max-width: 760px;
+	width: 100%;
+	padding: 2em;
+	box-shadow: 0 0 1em rgba(0, 0, 0, 0.4);
+	box-sizing: border-box;
+	font: 1rem/1 Noto, sans-serif;
+
+	@media all and (max-width: 500px) {
+		font-size: 0.5rem;
+	}
+
+	&__into {
+		max-height: 460px;
+	}
+
+	button {
+		flex: 1;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+
+		margin: 0.25rem;
+		padding: 1em;
+		background: #{$background};
+		border: 0.15em solid #{$foreground};
+
+		color: #{$foreground};
+		font-size: 0.9rem;
+		transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+
+		&:hover,
+		&:focus {
+			background: #{$foreground};
+			color: #{$background};
+		}
+	}
+
+	&__thumbnails {
+		transition: opacity 0.25s ease-in-out;
+	}
+
+	&__thumbnail {
+		height: 2em;
+	}
+
+	&__is-hidden ~ &__thumbnails {
+		opacity: 1;
+	}
+
+	&__nav {
+		display: flex;
+	}
+}
