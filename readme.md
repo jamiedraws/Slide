@@ -41,6 +41,24 @@ If you have objections to any of the standards, Slide may not be the right carou
 
 Otherwise, if you acknowledge and are willing to meet these standards head on, let's waste no time in setting up Slide in your project.
 
+# Demo
+
+Let's start off by checking out the demo carousel that we'll set up by following the tutorial below.
+
+[Open Working Demo](https://jamiedraws.github.io/demo/slide/ "See a working demo of the Slide carousel")
+
+First, let's test Slide carousel out. As the author, what we should be looking for are the essential working mechanisms that make a carousel.
+
+These include offering a:
+
+- Previous button
+- Pause button
+- Play button
+- Next button
+- Set of thumbnail buttons
+
+Next, let's explore behind the scenes and learn how to set up the carousel from scratch.
+
 # Carousel
 
 ## HTML
