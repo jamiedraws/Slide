@@ -1,3 +1,46 @@
+# Setup
+
+## Overview
+
+Slide carousel, nicknamed Slide, is a free-to-use library designed with discipline along with a mission in UX for both the audience and the author.
+
+## Mission, Vision, Value
+
+The mission of Slide is to provide a pleasant user experience that is designed using a simple, clear and minimal code base. Slide focuses on progressive enhancement and opens itself for extension.
+
+In order to support this mission, it is Slide's vision to aim for best practices of both web accessibility and web performance in its design.
+
+Should you choose to use Slide as your carousel, you will be able to:
+
+- Lay out your HTML structure freely
+- Opt-in with the presentation and functionality you need
+- Control the duration, delay and transition using CSS
+- Program freely in a private scope
+- Describe your content exactly how you need it
+
+These values support Slide's mission and vision. Slide is free of 3rd party dependencies and aims to be as clear and as simplified as possible.
+
+If this sounds like the kind of carousel that you'd like to use, please make sure you acknowledge the standards of using Slide in your project.
+
+## Standards
+
+In order to attain Slide's mission, there are standards that an author should strive for. The standards are as follows in that Slide should:
+
+- Operate as a basic carousel without any JavaScript
+- Operate as a basic carousel when JavaScript is disabled
+- Render and animate within a 60 FPS threshold
+- Degrade gracefully when resources are absent
+
+Most importantly though, Slide should never by any means:
+
+- Violate any of the web accessibility guidelines
+- Offer any mechanism to the user that won't work
+- Block the user from completing their objective
+
+If you have objections to any of the standards, Slide may not be the right carousel to suit your needs.
+
+Otherwise, if you acknowledge and are willing to meet these standards head on, let's waste no time in setting up Slide in your project.
+
 # Carousel
 
 ## HTML
@@ -39,13 +82,17 @@ What you'll need in order for the carousel to work are the following:
 
 ## CSS
 
-Secondly, let's link to `slide.css` using the following link element.
+Secondly, let's link to `slide.css` and `slide.ui.css` using the following link element.
 
 ```html
 <link rel="stylesheet" href="slide/css/slide.css" />
+<link rel="stylesheet" href="slide/css/components/slide.ui.css" />
 ```
 
-This stylesheet is responbile for providng strucutre to the carousel. Depending on where your carousel lives on your webpage should decide whether this stylesheet needs to go in the `<head>` or in the `<body>` element.
+| Stylesheets    | Description                                                                                                                                                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slide.css`    | This stylesheet is responbile for providng strucutre to the carousel. Depending on where your carousel lives on your webpage should decide whether this stylesheet needs to go in the `<head>` or in the `<body>` element. |
+| `slide.ui.css` | This is used to theme our carousel along with navigational controls.                                                                                                                                                       |
 
 If the HTML is parsed before this stylesheet is parsed, the webpage may incur layout shifting.
 
@@ -120,8 +167,8 @@ Let's test by interacting with the thumbnails. What should happen is if you inte
 > ### Accessibility Tip
 >
 > Describing the relationship for each thumbnail `<a>` element allows a user to understand what their action would do. [This meets the success criterion for WCAG 4.1.2 Name, Role, Value - Level A](https://www.w3.org/WAI/WCAG21/Understanding/name-role-value.html "Read the full definition of Name, Role, Value Success Criterion").
-
-> ### Accessibility Tip
+>
+> ---
 >
 > Users can also tab through each thumbnail with their keyboard and select a slide to display without the use of a mouse. [This functionality meets the success criterion for WCAG 2.2.1. Keyboard - Level A](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html "Read the full definition of Keyboard Success Criterion").
 
@@ -291,11 +338,11 @@ Slide.into(
 
 The `Slide.into` method takes the HTML element that represents the carousel and observes it.
 
-| Parameters     | Description                                                                                                                                                                                                                                        | Status   |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `Node Element` | This node element must represent the carousel itself. It does not need to represent the carousel's slides, nor the carousel's navigational controls.                                                                                               | Required |
-| `Object`       | This object is used to initialize any properties or methods that share a relationship with a carousel. It will be attached to the carousel object and it can be accessible from the callback function.                                             | Required |
-| `Function`     | This function is used to interact with the carousel object and program the desired functionality. In this function scope also is the carousel API where properties or methods that are defined using the `Slide.proto` method are also accessible. | Required |
+| Parameters     | Description                                                                                                                                                                                                                                     | Status   |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `Node Element` | This node element must represent the carousel itself. It does not need to represent the carousel's slides, nor the carousel's navigational controls.                                                                                            | Required |
+| `Object`       | This object is used to initialize any properties or methods that share a relationship with the carousel `Node Element`. It will be attached to the carousel object and it can be accessible from the callback `Function`.                       | Required |
+| `Function`     | This callback function is used to interact with the carousel object and program it as desired. In this function scope also is the carousel API where properties or methods that are defined using the `Slide.proto` method are also accessible. | Required |
 
 ## Result
 
