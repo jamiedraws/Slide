@@ -1,4 +1,6 @@
 (function(global) {
+	let instance = false;
+
 	const slide = function() {
 		const delay = {
 			name: "--slide-delay",
@@ -73,7 +75,7 @@
 
 						if (Number.isNaN(time)) {
 							time = delay.time;
-							throw "The delay amount is not a number.";
+							throw "E7 :: The delay amount is not a number.";
 						}
 
 						if (time < delay.time) {
@@ -150,20 +152,20 @@
 
 							return self;
 						} else {
-							throw "The 'api' is already constructed.";
+							throw "E2 :: The 'api' is already constructed.";
 						}
 					}
 				},
 				parent: {
 					set: function(parent) {
 						if (typeof parent !== "object") {
-							throw "The passed 'parent' must be an element.";
+							throw "E3 :: The passed 'parent' must be an element.";
 						}
 						if (parent === null) {
-							throw "The passed 'parent' could not be found.";
+							throw "E4 :: The passed 'parent' could not be found.";
 						}
 						if (parent.nodeType !== 1) {
-							throw "The passed 'parent' is not an element.";
+							throw "E5 :: The passed 'parent' is not an element.";
 						}
 
 						const worker = request(this.id);
@@ -246,7 +248,7 @@
 					enumerable: true,
 					value: function(index) {
 						if (typeof index !== "number") {
-							throw "The passed 'index' is not a number.";
+							throw "E6 :: The passed 'index' is not a number.";
 						}
 
 						const worker = request(this.id);
@@ -280,13 +282,27 @@
 				const ui = api.create(team.length - 1, parent, options);
 				return task.call(ui);
 			},
-			proto: api
+			proto: function(parameters) {
+				Object.create(api, parameters);
+				Object.keys(parameters).forEach(function(parameter) {
+					Object.defineProperty(api, parameter, {
+						writable: false,
+						configurable: false,
+						enumerable: true,
+						value: parameters[parameter]
+					});
+				});
+			}
 		};
 	};
 
 	if (typeof global.Slide !== "object") {
-		global.Slide = slide();
+		Object.defineProperty(global, "Slide", {
+			value: slide(),
+			writable: false,
+			configurable: false
+		});
 	} else {
-		throw "The 'Slide' feature has already been evaluated.";
+		throw "E1 :: The 'Slide' feature has already been evaluated.";
 	}
 })(window);
