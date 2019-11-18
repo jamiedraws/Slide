@@ -10,7 +10,9 @@ Slide.into(
 	function() {
 		const self = this;
 
-		console.log(self);
+		self.children = "h1llo";
+		delete self.children;
+		console.log(self.children);
 
 		// add support for previous slide button
 		self.prevButton.addEventListener("click", function() {

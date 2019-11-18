@@ -32,7 +32,7 @@
 						});
 
 						self.name = parent;
-						parent.classList.add("slide__into--no-scroll");
+						self.parent.classList.add("slide__into--no-scroll");
 
 						if (typeof config === "object") {
 							for (var option in config) {
@@ -173,9 +173,9 @@
 					}
 				},
 				children: {
-					set: function(children) {
+					set: function() {
 						const worker = request(this.id);
-						worker.children = children || worker.parent.children;
+						worker.children = worker.parent.children;
 					},
 					get: function() {
 						const worker = request(this.id);
