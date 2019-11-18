@@ -52,7 +52,7 @@ Slide can be programmed to work in either interface. The difference is that in t
 
 # API
 
-Slide's API structure utilizes an `object` to contain any properties and methods that are related to the individual carousel on the shallow-level and any properties and methods that are sharable amongst carousels on the prototype.
+Slide's API structure utilizes an `object` to contain any properties and methods that are related to the individual carousel on the shallow-level and any properties and methods that are shareable amongst carousels on the prototype.
 
 ```javascript
 /*
@@ -65,7 +65,7 @@ Slide's API structure utilizes an `object` to contain any properties and methods
 */
 ```
 
-This architecture allows Slide to protect carousel-specific properties and methods from conflicting with other carousel-specific properties and methods through separation, while providing access to sharable properties and methods through the prototype.
+This architecture allows Slide to protect carousel-specific properties and methods from conflicting with other carousel-specific properties and methods through separation, while providing access to shareable properties and methods through the prototype.
 
 Let's take a look at the default properties and methods.
 
@@ -125,19 +125,17 @@ The following methods below are accessible on Slide's prototype. Each method is 
     watch: function (task) {...},
     countChildren: function () {...},
     getDelay: function () {...},
-    isAuto: function () {...},
-    create: function (id, parent, config) {...}
+    isAuto: function () {...}
 }
 */
 ```
 
-| Method          | Description                                                                                                                                                                                                                                                                                                                      | Example                                       |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `watch`         | This watches Slide's rotation cycle and invokes a callback function on each rotation. The callback function is defined by the author. Slide will return the current slide index `number` and a `function` called finish, which must be invoked in order to finish the rotation.                                                  | `this.watch(function (index, finish) {...});` |
-| `countChildren` | This returns the total number of slides in a carousel, as a `number`.                                                                                                                                                                                                                                                            | `this.countChildren();`                       |
-| `getDelay`      | This returns the delay amount expressed in milliseconds, as a `number`.                                                                                                                                                                                                                                                          | `this.getDelay();`                            |
-| `isAuto`        | This returns an answer to whether Slide is automatically rotating each slide or not. For example, if the `play` method has been invoked, `isAuto` will return a `true` boolean. Otherwise, it will return a `false` boolean.                                                                                                     | `this.isAuto();`                              |
-| `create`        | This method constructs the API where it assigns Slide's numeric ID, namespace along with any available options an author defines in the `Slide.into` method. It is meant to only be invoked once during installation. Slide will throw an error `Uncaught The 'api' is already constructed.` if an author attempts to invoke it. | `NA`                                          |
+| Method          | Description                                                                                                                                                                                                                                                                     | Example                                       |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `watch`         | This watches Slide's rotation cycle and invokes a callback function on each rotation. The callback function is defined by the author. Slide will return the current slide index `number` and a `function` called finish, which must be invoked in order to finish the rotation. | `this.watch(function (index, finish) {...});` |
+| `countChildren` | This returns the total number of slides in a carousel, as a `number`.                                                                                                                                                                                                           | `this.countChildren();`                       |
+| `getDelay`      | This returns the delay amount expressed in milliseconds, as a `number`.                                                                                                                                                                                                         | `this.getDelay();`                            |
+| `isAuto`        | This returns an answer to whether Slide is automatically rotating each slide or not. For example, if the `play` method has been invoked, `isAuto` will return a `true` boolean. Otherwise, it will return a `false` boolean.                                                    | `this.isAuto();`                              |
 
 # API Errors
 
@@ -148,12 +146,11 @@ Let's take a look below at the list of error codes, their log and their descript
 | Code | Log                                               | Description                                                                                                                                                                                                                           |
 | ---- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `E1` | `The 'Slide' feature has already been evaluated.` | Slide will throw this error if the author has more than one `slide.js` resource in the document.                                                                                                                                      |
-| `E2` | `The 'api' is already constructed.`               | Slide will throw this error when an author attempts to invoke the `create` method within either `Slide.into` or `Slide.proto`.                                                                                                        |
-| `E3` | `The passed 'parent' must be an element.`         | Slide will throw this error when an author attempts to set the value of `parent` with a data type that is not an `node element`. Slide will conduct a `typeof object` condition against `parent` where it expects `true`.             |
-| `E4` | `The passed 'parent' could not be found.`         | Slide will throw this error when an author attempts to set the value of `parent` with a `node element` that does not exist in the document. Slide will conduct an equality `null` condition against `parent` where it expects `true`. |
-| `E5` | `The passed 'parent' is not an element.`          | Slide will throw this error when an author attempts to set the value of `parent` with a `node type` that is not an `element`. Slide will conduct an inequality `node type of 1` condition against `parent` where it expects `true`.   |
-| `E6` | `The passed 'index' is not a number.`             | Slide will throw this error when an author attempts to invoke the `goto` method and either ignore the parameter or include a parameter that is not a `number`.                                                                        |
-| `E7` | `The delay amount is not a number.`               | Slide will throw this error when an author attempts to set the `delay` value to a data type that is not a `number`.                                                                                                                   |
+| `E2` | `The passed 'parent' must be an element.`         | Slide will throw this error when an author attempts to set the value of `parent` with a data type that is not an `node element`. Slide will conduct a `typeof object` condition against `parent` where it expects `true`.             |
+| `E3` | `The passed 'parent' could not be found.`         | Slide will throw this error when an author attempts to set the value of `parent` with a `node element` that does not exist in the document. Slide will conduct an equality `null` condition against `parent` where it expects `true`. |
+| `E4` | `The passed 'parent' is not an element.`          | Slide will throw this error when an author attempts to set the value of `parent` with a `node type` that is not an `element`. Slide will conduct an inequality `node type of 1` condition against `parent` where it expects `true`.   |
+| `E5` | `The passed 'index' is not a number.`             | Slide will throw this error when an author attempts to invoke the `goto` method and either ignore the parameter or include a parameter that is not a `number`.                                                                        |
+| `E6` | `The delay amount is not a number.`               | Slide will throw this error when an author attempts to set the `delay` value to a data type that is not a `number`.                                                                                                                   |
 
 # `Slide.proto` Method
 
@@ -170,7 +167,7 @@ Slide.proto({
 
 Slide will receive this object and assign them to the API and then ensure the properties and methods are immutable. This way, the author's custom functionality will have the same level of protection as the default API properties and methods.
 
-Inside each custom method, the author can access other sharable properties and methods that also live in the prototype. This can create powerful functionality.
+Inside each custom method, the author can access other shareable properties and methods that also live in the prototype. This can create powerful functionality.
 
 ## Good Example
 

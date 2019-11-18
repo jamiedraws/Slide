@@ -1,6 +1,4 @@
 (function(global) {
-	let instance = false;
-
 	const slide = function() {
 		const delay = {
 			name: "--slide-delay",
@@ -15,6 +13,36 @@
 		const manager = Object.defineProperties(
 			{},
 			{
+				create: {
+					value: function(api, id, parent, config) {
+						const self = Object.create(api);
+
+						Object.defineProperties(self, {
+							name: {
+								set: function(parent) {
+									this.parent = parent;
+								},
+								get: function() {
+									return this.parent.id;
+								}
+							},
+							id: {
+								value: id
+							}
+						});
+
+						self.name = parent;
+						parent.classList.add("slide__into--no-scroll");
+
+						if (typeof config === "object") {
+							for (var option in config) {
+								self[option] = config[option];
+							}
+						}
+
+						return self;
+					}
+				},
 				assign: {
 					value: function() {
 						const self = Object.create(this);
@@ -75,7 +103,7 @@
 
 						if (Number.isNaN(time)) {
 							time = delay.time;
-							throw "E7 :: The delay amount is not a number.";
+							throw "E6 :: The delay amount is not a number.";
 						}
 
 						if (time < delay.time) {
@@ -123,49 +151,16 @@
 		const api = Object.defineProperties(
 			{},
 			{
-				create: {
-					value: function(id, parent, config) {
-						if (!("id" in this)) {
-							const self = Object.create(this);
-							Object.defineProperties(self, {
-								name: {
-									set: function(parent) {
-										this.parent = parent;
-									},
-									get: function() {
-										return this.parent.id;
-									}
-								},
-								id: {
-									value: id
-								}
-							});
-
-							self.name = parent;
-							parent.classList.add("slide__into--no-scroll");
-
-							if (typeof config === "object") {
-								for (var option in config) {
-									self[option] = config[option];
-								}
-							}
-
-							return self;
-						} else {
-							throw "E2 :: The 'api' is already constructed.";
-						}
-					}
-				},
 				parent: {
 					set: function(parent) {
 						if (typeof parent !== "object") {
-							throw "E3 :: The passed 'parent' must be an element.";
+							throw "E2 :: The passed 'parent' must be an element.";
 						}
 						if (parent === null) {
-							throw "E4 :: The passed 'parent' could not be found.";
+							throw "E3 :: The passed 'parent' could not be found.";
 						}
 						if (parent.nodeType !== 1) {
-							throw "E5 :: The passed 'parent' is not an element.";
+							throw "E4 :: The passed 'parent' is not an element.";
 						}
 
 						const worker = request(this.id);
@@ -248,7 +243,7 @@
 					enumerable: true,
 					value: function(index) {
 						if (typeof index !== "number") {
-							throw "E6 :: The passed 'index' is not a number.";
+							throw "E5 :: The passed 'index' is not a number.";
 						}
 
 						const worker = request(this.id);
@@ -260,40 +255,49 @@
 			}
 		);
 
-		return {
-			into: function(parent, init, app) {
-				const worker = manager.assign();
-				let task, options;
-				team.push(worker);
+		const interface = Object.defineProperties(
+			{},
+			{
+				into: {
+					value: function(parent, init, app) {
+						const worker = manager.assign();
+						let task, options;
+						team.push(worker);
 
-				if (typeof init === "function") {
-					task = init;
+						if (typeof init === "function") {
+							task = init;
+						}
+
+						if (typeof init === "object") {
+							task = app;
+							options = init;
+						} else if (typeof app === "object") {
+							options = app;
+						} else {
+							options = {};
+						}
+
+						const ui = manager.create(api, team.length - 1, parent, options);
+						return task.call(ui);
+					}
+				},
+				proto: {
+					value: function(parameters) {
+						Object.create(api, parameters);
+						Object.keys(parameters).forEach(function(parameter) {
+							Object.defineProperty(api, parameter, {
+								writable: false,
+								configurable: false,
+								enumerable: true,
+								value: parameters[parameter]
+							});
+						});
+					}
 				}
-
-				if (typeof init === "object") {
-					task = app;
-					options = init;
-				} else if (typeof app === "object") {
-					options = app;
-				} else {
-					options = {};
-				}
-
-				const ui = api.create(team.length - 1, parent, options);
-				return task.call(ui);
-			},
-			proto: function(parameters) {
-				Object.create(api, parameters);
-				Object.keys(parameters).forEach(function(parameter) {
-					Object.defineProperty(api, parameter, {
-						writable: false,
-						configurable: false,
-						enumerable: true,
-						value: parameters[parameter]
-					});
-				});
 			}
-		};
+		);
+
+		return interface;
 	};
 
 	if (typeof global.Slide !== "object") {
