@@ -18,7 +18,7 @@ $background: #ededed;
 	}
 
 	button {
-		flex: 1;
+		flex: 1 1 100px;
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -53,5 +53,6 @@ $background: #ededed;
 
 	&__nav {
 		display: flex;
+		flex-wrap: wrap;
 	}
 }

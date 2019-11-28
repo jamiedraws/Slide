@@ -18,7 +18,7 @@
 }
 
 .slide button {
-  flex: 1;
+  flex: 1 1 100px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -50,5 +50,6 @@
 
 .slide__nav {
   display: flex;
+  flex-wrap: wrap;
 }
 /*# sourceMappingURL=slide.ui.css.map */
