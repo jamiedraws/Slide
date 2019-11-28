@@ -1,0 +1,6 @@
+.slide {
+	&__item {
+		transform: translateY(0);
+		transform: translateY(var(--slide-pos));
+	}
+}

@@ -2,35 +2,21 @@
 	$this: &;
 
 	&__into {
-		--slide-pos: 0;
-		--slide-delay: 5000;
-		--slide-duration: 250ms;
-		--slide-easing: ease-in-out;
-		animation-iteration-count: 2000;
-		counter-increment: 0;
+		position: relative;
 
+		display: flex;
+		align-items: flex-start;
 		margin: 0.25rem;
 		border-color: #252525;
 		contain: content;
 
-		display: flex;
-		align-items: flex-start;
-		position: relative;
-
 		scroll-behavior: smooth;
 		-webkit-overflow-scrolling: touch;
-		scroll-snap-points-x: repeat(100%);
-		scroll-snap-type: mandatory;
-		-ms-overflow-style: -ms-autohiding-scrollbar;
+
+		overscroll-behavior-x: contain;
+		scroll-snap-type: x mandatory;
 		overflow-x: scroll;
 		overflow-y: hidden;
-
-		-webkit-backface-visibility: hidden;
-		backface-visibility: hidden;
-
-		&--no-scroll {
-			overflow: hidden;
-		}
 	}
 
 	&__item {
@@ -38,15 +24,8 @@
 		align-items: center;
 		flex: 1 0 100%;
 
-		transition-property: transform;
-		transform: translateX(0);
-		transform: translateX(var(--slide-pos));
-		transition-duration: 250ms;
-		transition-duration: var(--slide-duration, 250ms);
-		transition-timing-function: ease-in-out;
-		transition-timing-function: var(--slide-easing, ease-in-out);
-
 		position: relative;
+		scroll-snap-align: start;
 	}
 
 	img {
@@ -59,5 +38,20 @@
 
 	&__is-hidden {
 		display: none;
+	}
+
+	&--vertical {
+		#{$this}__into {
+			flex-direction: column;
+
+			overscroll-behavior-y: contain;
+			scroll-snap-type: y mandatory;
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+	}
+
+	& &__into--no-scroll {
+		overflow: hidden;
 	}
 }

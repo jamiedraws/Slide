@@ -4,19 +4,11 @@
   flex-wrap: wrap;
 }
 
-.slide__thumbnails--disable .slide__thumbnail {
-  pointer-events: none;
-}
-
 .slide__thumbnails--scroll {
+  flex-wrap: nowrap;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  flex-wrap: nowrap;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-}
-
-.slide__thumbnails--scroll::-webkit-scrollbar {
   width: 0.25em;
   height: 0.25em;
   background: #d7d7d7;
@@ -31,7 +23,6 @@
 }
 
 .slide__thumbnail {
-  /* can set the flex basis to customize the grid */
   flex: 1 1 20%;
   display: inline-flex;
   justify-content: center;
@@ -39,25 +30,25 @@
   border: 0.05rem solid;
   background: transparent;
   border-color: inherit;
-  color: inherit;
   margin: 0.25rem;
   height: 5em;
   padding: 0;
-  position: relative;
+  color: inherit;
   text-decoration: none;
+  position: relative;
 }
 
 .slide__thumbnail::before {
-  background: rgba(0, 0, 0, 0.2);
   content: "";
   position: absolute;
+  z-index: 1;
   top: 0;
   left: 0;
   opacity: 0;
   right: 0;
   bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease-out;
-  z-index: 1;
 }
 
 .slide__thumbnail:hover::before, .slide__thumbnail:focus::before, .slide__thumbnail--is-selected::before {

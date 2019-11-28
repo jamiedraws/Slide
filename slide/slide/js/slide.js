@@ -1,9 +1,8 @@
 (function(global) {
 	const slide = function() {
-		const delay = {
-			name: "--slide-delay",
-			shim: "animation-iteration-count",
-			time: 1000
+		const rules = {
+			delay: 5000,
+			noScroll: "slide__into--no-scroll"
 		};
 		const team = [];
 		const request = function(id) {
@@ -32,7 +31,6 @@
 						});
 
 						self.name = parent;
-						self.parent.classList.add("slide__into--no-scroll");
 
 						if (typeof config === "object") {
 							for (var option in config) {
@@ -51,9 +49,18 @@
 						self.shim = false;
 						self.auto = false;
 						self.timer = undefined;
-						self.delay = delay.time;
+						self.delay = rules.delay;
 
 						return self;
+					}
+				},
+				setScroll: {
+					value: function(scroll) {
+						if (scroll) {
+							this.parent.classList.add(rules.noScroll);
+						} else {
+							this.parent.classList.remove(rules.noScroll);
+						}
 					}
 				},
 				setIndex: {
@@ -78,36 +85,15 @@
 				},
 				setRotation: {
 					value: function() {
-						const parent = this.parent;
-						const pos = this.position;
-
-						if (!this.shim) {
-							parent.style.setProperty("--slide-pos", pos + "%");
-						} else {
-							const children = this.children;
-							children.forEach(function(child) {
-								child.style.transform = "translateX(" + pos + "%)";
-							});
-						}
+						const slide = this.children[this.index];
+						slide.scrollIntoView();
 					}
 				},
 				setDelay: {
-					value: function() {
-						const style = getComputedStyle(this.parent);
-						let time = parseInt(style.getPropertyValue(delay.name));
-
-						if (Number.isNaN(time)) {
-							this.shim = true;
-							time = parseInt(style.getPropertyValue(delay.shim));
-						}
-
-						if (Number.isNaN(time)) {
-							time = delay.time;
-							throw "E6 :: The delay amount is not a number.";
-						}
-
-						if (time < delay.time) {
-							time = delay.time;
+					value: function(time) {
+						const illegal = typeof time !== "number" || time < rules.delay;
+						if (illegal) {
+							time = this.delay;
 						}
 
 						this.delay = time;
@@ -200,26 +186,27 @@
 					}
 				},
 				getDelay: {
-					value: function() {
+					value: function(time) {
 						const worker = request(this.id);
-						worker.setDelay();
+						worker.setDelay(time);
 						return worker.delay;
 					}
 				},
 				play: {
 					enumerable: true,
-					value: function() {
+					value: function(reverse) {
 						const worker = request(this.id);
-						this.pause();
+						this.pause(true);
 						worker.auto = true;
 						worker.setTask(worker.index + 1);
 					}
 				},
 				pause: {
 					enumerable: true,
-					value: function() {
+					value: function(scroll) {
 						const worker = request(this.id);
 						worker.auto = false;
+						worker.setScroll(scroll);
 						clearTimeout(worker.timer);
 					}
 				},
@@ -227,7 +214,7 @@
 					enumerable: true,
 					value: function() {
 						const worker = request(this.id);
-						this.pause();
+						this.pause(true);
 						worker.setTask(worker.index - 1);
 					}
 				},
@@ -235,7 +222,7 @@
 					enumerable: true,
 					value: function() {
 						const worker = request(this.id);
-						this.pause();
+						this.pause(true);
 						worker.setTask(worker.index + 1);
 					}
 				},
