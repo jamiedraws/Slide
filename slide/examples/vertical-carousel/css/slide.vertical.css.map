@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AACE,AAAD,YAAO,CAAC;EACP,SAAS,EAAE,aAAa;EACxB,SAAS,EAAE,4BAA4B;CACvC",
-    "sources": [
-        "slide.vertical.scss"
-    ],
-    "names": [],
-    "file": "slide.vertical.css"
-}
