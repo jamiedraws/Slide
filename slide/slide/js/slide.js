@@ -435,15 +435,19 @@
                 },
                 proto: {
                     value: function(parameters) {
-                        Object.create(slide.api, parameters);
-                        Object.keys(parameters).forEach(function(parameter) {
-                            Object.defineProperty(slide.api, parameter, {
-                                writable: false,
-                                configurable: false,
-                                enumerable: true,
-                                value: parameters[parameter]
+                        if (typeof parameters === "object") {
+                            Object.create(slide.api, parameters);
+                            Object.keys(parameters).forEach(function(
+                                parameter
+                            ) {
+                                Object.defineProperty(slide.api, parameter, {
+                                    writable: false,
+                                    configurable: false,
+                                    enumerable: true,
+                                    value: parameters[parameter]
+                                });
                             });
-                        });
+                        }
                     }
                 }
             })
@@ -456,5 +460,6 @@
             writable: false,
             configurable: false
         });
+        Object.freeze(global.Slide);
     }
 })(window);
