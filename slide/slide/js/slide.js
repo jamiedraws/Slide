@@ -231,13 +231,13 @@
                 parent: {
                     set: function(parent) {
                         if (typeof parent !== "object") {
-                            throw this.getError("ERR-E");
+                            this.getError("ERR-E");
                         }
                         if (parent === null) {
-                            throw this.getError("ERR-P");
+                            this.getError("ERR-P");
                         }
                         if (parent.nodeType !== 1) {
-                            throw this.getError("ERR-N");
+                            this.getError("ERR-N");
                         }
 
                         const worker = slide.request(this.id);
