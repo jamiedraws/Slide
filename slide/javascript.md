@@ -6,6 +6,13 @@ Slide is powered by a simple JavaScript API that the author can access in the `S
 
 If you've already followed the **Setup** tutorial and have a working Slide on your webpage, please continue reading below to learn more about how the JavaScript works.
 
+## Interfaces
+
+| Property      | Description                                                                                                                                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Slide.into`  | This method allows an author to apply Slide's JavaScript API to a carousel. It provides two coding interfaces: a function which accepts parameters in the order `NodeElement, Function` and a function which accepts parameters in the order `NodeElement, Object, Function`. |
+| `Slide.proto` | This method allows an author to build additional functioanlity onto Slide's prototype as new `Object` properties or methods. These properties and methods can be shared across multiple Slide carousels.                                                                      |
+
 ## `Slide.into` Method
 
 Let's take a look at the `Slide.into` method. There are two different interfaces to code in.
@@ -107,13 +114,13 @@ The following methods below are accessible in Slide's prototype. Each method is 
 */
 ```
 
-| Method  | Description                                                                                                                           | Example         |
-| ------- | ------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| `next`  | This advances the carousel one slide forward. On the last slide, invoking the `next` method will advance back to the first slide.     | `this.next();`  |
-| `prev`  | This advances the carousel one slide backward. On the first slide, invoking the `prev` method will advance forward to the last slide. | `this.prev();`  |
-| `play`  | This advances the carousel one slide forward, like `next`, and repeats the task on each `delay`.                                      | `this.play();`  |
-| `pause` | This pauses on the current slide.                                                                                                     | `this.pause();` |
-| `goto`  | This advances the carousel to a particular slide using it's index `number`.                                                           | `this.goto();`  |
+| Method  | Description                                                                                                                                                                                                                                                          | Example             |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `next`  | This advances the carousel one slide forward. On the last slide, invoking the `next` method will advance back to the first slide.                                                                                                                                    | `this.next();`      |
+| `prev`  | This advances the carousel one slide backward. On the first slide, invoking the `prev` method will advance forward to the last slide.                                                                                                                                | `this.prev();`      |
+| `play`  | This advances the carousel one slide forward, like `next`, and repeats the task on each `delay`.                                                                                                                                                                     | `this.play();`      |
+| `pause` | This pauses on the current slide.                                                                                                                                                                                                                                    | `this.pause();`     |
+| `goto`  | This advances the carousel to a particular slide using it's index `number`. This method requires the index parameter. If an author attempts to invoke the method without the index parameter or if the index is not a `number`, Slide will throw error code `ERR-X`. | `this.goto(index);` |
 
 # API Methods (Non-Enumerable)
 
@@ -124,18 +131,24 @@ The following methods below are accessible on Slide's prototype. Each method is 
 {
     watch: function (task) {...},
     countChildren: function () {...},
+    setDelay: function (delay) {...},
     getDelay: function () {...},
-    isAuto: function () {...}
+    isAuto: function () {...},
+    setError: function (code, message) {...},
+    getError: function (code) {...}
 }
 */
 ```
 
-| Method          | Description                                                                                                                                                                                                                                                                     | Example                                       |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `watch`         | This watches Slide's rotation cycle and invokes a callback function on each rotation. The callback function is defined by the author. Slide will return the current slide index `number` and a `function` called finish, which must be invoked in order to finish the rotation. | `this.watch(function (index, finish) {...});` |
-| `countChildren` | This returns the total number of slides in a carousel, as a `number`.                                                                                                                                                                                                           | `this.countChildren();`                       |
-| `getDelay`      | This returns the delay amount expressed in milliseconds, as a `number`.                                                                                                                                                                                                         | `this.getDelay();`                            |
-| `isAuto`        | This returns an answer to whether Slide is automatically rotating each slide or not. For example, if the `play` method has been invoked, `isAuto` will return a `true` boolean. Otherwise, it will return a `false` boolean.                                                    | `this.isAuto();`                              |
+| Method          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Example                               |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `watch`         | This watches Slide's rotation cycle and invokes a callback function on each rotation. The callback function is defined by the author. Slide will return the current slide index `number`.                                                                                                                                                                                                                                                                                         | `this.watch(function (index) {...});` |
+| `countChildren` | This returns the total number of slides in a carousel, as a `number`.                                                                                                                                                                                                                                                                                                                                                                                                             | `this.countChildren();`               |
+| `setDelay`      | This allows an author to set a delay for Slide to rotate with and accepts a `delay` parameter as a `number` and is expressed in milliseconds. If an author attempts to invoke the method without setting a `delay`, Slide will assume the default delay amount of `5000`. If an author attempts to invoke the method with a `delay` amount of less than 5000, Slide will use the default delay amount of `5000` instead.                                                          | `this.setDelay(delay);`               |
+| `getDelay`      | This returns the delay amount expressed in milliseconds, as a `number`.                                                                                                                                                                                                                                                                                                                                                                                                           | `this.getDelay();`                    |
+| `isAuto`        | This returns an answer to whether Slide is automatically rotating each slide or not. For example, if the `play` method has been invoked, `isAuto` will return a `true` boolean. Otherwise, it will return a `false` boolean.                                                                                                                                                                                                                                                      | `this.isAuto();`                      |
+| `setError`      | This allows an author to add a custom error `code` and `message` to Slide's error object. The `code` and `message` parameters must be a `string`. If an author attempts to invoke this method without these parameters or if either parameter is not a `string`, Slide will throw error code `ERR-M`.                                                                                                                                                                             | `this.setError(code, message);`       |
+| `getError`      | This allows an author to throw an error message in the program using the error `code`. The `code` parameter must be a string and it must match a code in Slide's error object. If an author attempts to invoke this method without a `code` or if the parameter is not a `string`, Slide will throw error code `ERR-C`. If an author attempts to invoke this method with a `code` that is not in Slide's error object, Slide will not throw the error using it's default message. | `this.getError(code);`                |
 
 # API Errors
 
@@ -143,14 +156,14 @@ Slide enforces protection against damaging the integrity of the program by throw
 
 Let's take a look below at the list of error codes, their log and their description.
 
-| Code | Log                                               | Description                                                                                                                                                                                                                           |
-| ---- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `E1` | `The 'Slide' feature has already been evaluated.` | Slide will throw this error if the author has more than one `slide.js` resource in the document.                                                                                                                                      |
-| `E2` | `The passed 'parent' must be an element.`         | Slide will throw this error when an author attempts to set the value of `parent` with a data type that is not an `node element`. Slide will conduct a `typeof object` condition against `parent` where it expects `true`.             |
-| `E3` | `The passed 'parent' could not be found.`         | Slide will throw this error when an author attempts to set the value of `parent` with a `node element` that does not exist in the document. Slide will conduct an equality `null` condition against `parent` where it expects `true`. |
-| `E4` | `The passed 'parent' is not an element.`          | Slide will throw this error when an author attempts to set the value of `parent` with a `node type` that is not an `element`. Slide will conduct an inequality `node type of 1` condition against `parent` where it expects `true`.   |
-| `E5` | `The passed 'index' is not a number.`             | Slide will throw this error when an author attempts to invoke the `goto` method and either ignore the parameter or include a parameter that is not a `number`.                                                                        |
-| `E6` | `The delay amount is not a number.`               | Slide will throw this error when an author attempts to set the `delay` value to a data type that is not a `number`.                                                                                                                   |
+| Code    | Log                                                     | Description                                                                                                                                                                                                                           |
+| ------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ERR-E` | `The passed 'parent' must be an element.`               | Slide will throw this error when an author attempts to set the value of `parent` with a data type that is not an `node element`. Slide will conduct a `typeof object` condition against `parent` where it expects `true`.             |
+| `ERR-P` | `The passed 'parent' could not be found.`               | Slide will throw this error when an author attempts to set the value of `parent` with a `node element` that does not exist in the document. Slide will conduct an equality `null` condition against `parent` where it expects `true`. |
+| `ERR-N` | `The passed 'parent' is not an element.`                | Slide will throw this error when an author attempts to set the value of `parent` with a `node type` that is not an `element`. Slide will conduct an inequality `node type of 1` condition against `parent` where it expects `true`.   |
+| `ERR-X` | `The passed 'index' is not a number.`                   | Slide will throw this error when an author attempts to invoke the `goto` method and either ignore the parameter or include a parameter that is not a `number`.                                                                        |
+| `ERR-M` | `The passed error 'code' or 'message' is not a string.` | Slide will throw this error if the author attempts to set an error either without a `code` and `message` or if the `code` and `message` is not a `string` type.                                                                       |
+| `ERR-C` | `The passed error 'code' is not a string.`              | Slide will throw this error if the author attempts to throw an error either without a `code` or if the `code` is not a `string` type.                                                                                                 |
 
 # `Slide.proto` Method
 
@@ -175,9 +188,9 @@ For example, an author can define a method called `slideName` and pass it into t
 
 ```javascript
 Slide.proto({
-	slideName: function() {
-		console.log("Hello, " + this.name);
-	}
+    slideName: function() {
+        console.log("Hello, " + this.name);
+    }
 });
 ```
 
@@ -185,7 +198,7 @@ Then, from within the `Slide.into` callback function, that custom method can be 
 
 ```javascript
 Slide.into(document.querySelector(".slide__into"), function() {
-	this.slideName();
+    this.slideName();
 });
 ```
 
@@ -197,9 +210,9 @@ However, an author cannot define a method that has already been defined either b
 
 ```javascript
 Slide.proto({
-	next: function() {
-		/* This is dangerous as it would override the default functionality to advance a slide forward. */
-	}
+    next: function() {
+        /* This is dangerous as it would override the default functionality to advance a slide forward. */
+    }
 });
 ```
 

@@ -8,38 +8,38 @@ While Slide provides a robust and simple JavaScript API, it shines in CSS and it
 
 ```scss
 .slide {
-	$this: &;
+    $this: &;
 
-	&__into {
-		// flexbox model direction set on the x-axis
+    &__into {
+        // flexbox model direction set on the x-axis
 
-		// scroll snap api set on the x-axis
+        // scroll snap api set on the x-axis
 
-		// scroll behavior configuration
-	}
+        // scroll behavior configuration
+    }
 
-	&__item {
-		// flexbox model
+    &__item {
+        // flexbox model
 
-		// scroll snap alignment
-	}
+        // scroll snap alignment
+    }
 
-	&__is-hidden {
-		// hidden state
-	}
+    &__is-hidden {
+        // hidden state
+    }
 
-	&--vertical {
-		#{$this}__into {
-			// flexbox model direction set on the y-axis
+    &--vertical {
+        #{$this}__into {
+            // flexbox model direction set on the y-axis
 
-			// scroll snap api set on the y-axis
-		}
-	}
+            // scroll snap api set on the y-axis
+        }
+    }
 
-	& &__into--no-scroll {
-		// no manual scrolling applied when user interaction
-		// requires an automatic scroll
-	}
+    & &__into--no-scroll {
+        // no manual scrolling applied when user interaction
+        // requires an automatic scroll
+    }
 }
 ```
 
@@ -65,7 +65,7 @@ This feature is enabled only when the `slide.js` resource is not applied to Slid
 | `scroll-snap-type`      | This tells the browser to snap along the x-axis and will rest on a snap point when the scroll action is finsihed. | `x mandatory` |
 | `overscroll-behavior-x` | This tells the browser how to behave when the horizontal boundary of a scrolling area is reached.                 | `contain`     |
 
-> ### Progressive Enhancement
+> ### Graceful Degradation
 >
 > Browsers that do not support the Scroll Snap API will gracefully fallback to it's native scrolling behavior.
 
@@ -75,6 +75,6 @@ Slide utilizes the `scroll-behavior` property to control the animation while int
 
 The `smooth` value is applied by default; however, for browsers that do not support `scroll-behavior`, the transition will instead be instant.
 
-> ### Progressive Enhancement
+> ### Graceful Degradation
 >
 > Browsers that do not support the `scroll-behavior` will gracefully fallback to it's native jumping behavior.

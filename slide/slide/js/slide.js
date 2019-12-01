@@ -1,299 +1,425 @@
 (function(global) {
-	const slide = function() {
-		const rules = {
-			delay: 5000,
-			noScroll: "slide__into--no-scroll"
-		};
-		const team = [];
-		const request = function(id) {
-			return team[id];
-		};
+    const generate = function(properties, o) {
+        return Object.defineProperties(o || {}, properties);
+    };
 
-		const manager = Object.defineProperties(
-			{},
-			{
-				create: {
-					value: function(api, id, parent, config) {
-						const self = Object.create(api);
+    const toArray = function(collection) {
+        const store = [];
+        const ar = store.slice.call(collection);
+        return ar;
+    };
 
-						Object.defineProperties(self, {
-							name: {
-								set: function(parent) {
-									this.parent = parent;
-								},
-								get: function() {
-									return this.parent.id;
-								}
-							},
-							id: {
-								value: id
-							}
-						});
+    const slide = generate({
+        defaults: {
+            value: generate({
+                delay: {
+                    value: 5000
+                },
+                noScroll: {
+                    value: "slide__into--no-scroll"
+                },
+                error: {
+                    value: "The passed error code could not be found."
+                }
+            })
+        },
+        errors: {
+            value: generate({
+                "ERR-E": {
+                    value: "The passed 'parent' must be an element."
+                },
+                "ERR-P": {
+                    value: "The passed 'parent' could not be found."
+                },
+                "ERR-N": {
+                    value: "The passed 'parent' is not an element."
+                },
+                "ERR-X": {
+                    value: "The passed 'index' is not a number."
+                },
+                "ERR-M": {
+                    value:
+                        "The passed error 'code' or 'message' is not a string."
+                },
+                "ERR-C": {
+                    value: "The passed error 'code' is not a string."
+                }
+            })
+        },
+        team: {
+            value: []
+        },
+        request: {
+            value: function(id) {
+                return this.team[id];
+            }
+        },
+        makeArray: {},
+        observer: {
+            value: function(parent, children, cb) {
+                if (window.hasOwnProperty("IntersectionObserver")) {
+                    const io = new IntersectionObserver(
+                        function(entries) {
+                            entries.forEach(function(entry) {
+                                if (
+                                    entry.intersectionRatio > 0 &&
+                                    entry.isIntersecting
+                                ) {
+                                    const items = toArray(children);
+                                    const index = items.indexOf(entry.target);
+                                    cb(index);
+                                }
+                            });
+                        },
+                        {
+                            root: parent,
+                            rootMargin: "0px",
+                            threshold: 0.9
+                        }
+                    );
 
-						self.name = parent;
+                    return function(children) {
+                        const items = toArray(children);
+                        items.forEach(function(item) {
+                            io.observe(item);
+                        });
+                    };
+                } else {
+                    return function() {
+                        const noScroll = slide.defaults.noScroll;
+                        this.shim = true;
+                        this.parent.classList.add(noScroll);
+                    };
+                }
+            }
+        },
+        manager: {
+            value: generate({
+                create: {
+                    value: function(api, id, parent, config) {
+                        const self = Object.create(api);
 
-						if (typeof config === "object") {
-							for (var option in config) {
-								self[option] = config[option];
-							}
-						}
+                        Object.defineProperties(self, {
+                            name: {
+                                set: function(parent) {
+                                    this.parent = parent;
+                                },
+                                get: function() {
+                                    return this.parent.id;
+                                }
+                            },
+                            id: {
+                                value: id
+                            }
+                        });
 
-						return self;
-					}
-				},
-				assign: {
-					value: function() {
-						const self = Object.create(this);
+                        self.name = parent;
 
-						self.index = 0;
-						self.shim = false;
-						self.auto = false;
-						self.timer = undefined;
-						self.delay = rules.delay;
+                        if (typeof config === "object") {
+                            Object.keys(config).forEach(function(option) {
+                                const c = config[option];
+                                Object.defineProperty(self, option, {
+                                    enumerable: true,
+                                    value: c
+                                });
+                            });
+                        }
 
-						return self;
-					}
-				},
-				setScroll: {
-					value: function(scroll) {
-						if (scroll) {
-							this.parent.classList.add(rules.noScroll);
-						} else {
-							this.parent.classList.remove(rules.noScroll);
-						}
-					}
-				},
-				setIndex: {
-					value: function(index) {
-						const children = this.children.length;
-						if (typeof index === "number") {
-							this.index = index;
-						}
+                        return self;
+                    }
+                },
+                assign: {
+                    value: function() {
+                        const self = Object.create(this);
 
-						if (this.index === children) {
-							this.index = 0;
-						} else if (this.index < 0) {
-							this.index = children - 1;
-						}
-					}
-				},
-				setPosition: {
-					value: function() {
-						const currentIndex = this.index;
-						this.position = -(currentIndex * 100);
-					}
-				},
-				setRotation: {
-					value: function() {
-						const slide = this.children[this.index];
-						slide.scrollIntoView();
-					}
-				},
-				setDelay: {
-					value: function(time) {
-						const illegal = typeof time !== "number" || time < rules.delay;
-						if (illegal) {
-							time = this.delay;
-						}
+                        self.index = 0;
+                        self.shim = false;
+                        self.auto = false;
+                        self.timer = 0;
+                        self.delay = slide.defaults.delay;
 
-						this.delay = time;
-					}
-				},
-				setCallback: {
-					value: function(finish) {
-						if (typeof this.handleCallback === "function") {
-							this.handleCallback(this.index, finish);
-						} else {
-							finish();
-						}
-					}
-				},
-				setTimer: {
-					value: function(cb) {
-						if (this.auto) {
-							this.timer = setTimeout(cb, this.delay);
-						} else {
-							clearTimeout(this.timer);
-						}
-					}
-				},
-				setTask: {
-					value: function(index) {
-						const self = this;
-						self.setDelay();
-						self.setIndex(index);
-						self.setPosition();
-						self.setRotation();
-						self.setCallback(function() {
-							self.setTimer(function() {
-								self.setTask(self.index + 1);
-							});
-						});
-					}
-				}
-			}
-		);
+                        return self;
+                    }
+                },
+                observer: {
+                    value: function(parent, children) {
+                        const self = this;
+                        return slide.observer(parent, children, function(
+                            index
+                        ) {
+                            self.setIndex(index);
+                            self.setCallback();
+                        });
+                    }
+                },
+                setIndex: {
+                    value: function(index) {
+                        const children = this.children.length;
 
-		const api = Object.defineProperties(
-			{},
-			{
-				parent: {
-					set: function(parent) {
-						if (typeof parent !== "object") {
-							throw "E2 :: The passed 'parent' must be an element.";
-						}
-						if (parent === null) {
-							throw "E3 :: The passed 'parent' could not be found.";
-						}
-						if (parent.nodeType !== 1) {
-							throw "E4 :: The passed 'parent' is not an element.";
-						}
+                        if (typeof index === "number") {
+                            this.index = index;
+                        }
 
-						const worker = request(this.id);
-						worker.parent = parent;
-						this.children = parent.children;
-					},
-					get: function() {
-						const worker = request(this.id);
-						return worker.parent;
-					}
-				},
-				children: {
-					set: function() {
-						const worker = request(this.id);
-						worker.children = worker.parent.children;
-					},
-					get: function() {
-						const worker = request(this.id);
-						return worker.children;
-					}
-				},
-				isAuto: {
-					value: function() {
-						const worker = request(this.id);
-						return worker.auto;
-					}
-				},
-				watch: {
-					value: function(task) {
-						const worker = request(this.id);
-						worker.handleCallback = task.bind(this);
-					}
-				},
-				countChildren: {
-					value: function() {
-						return this.children.length;
-					}
-				},
-				getDelay: {
-					value: function(time) {
-						const worker = request(this.id);
-						worker.setDelay(time);
-						return worker.delay;
-					}
-				},
-				play: {
-					enumerable: true,
-					value: function(reverse) {
-						const worker = request(this.id);
-						this.pause(true);
-						worker.auto = true;
-						worker.setTask(worker.index + 1);
-					}
-				},
-				pause: {
-					enumerable: true,
-					value: function(scroll) {
-						const worker = request(this.id);
-						worker.auto = false;
-						worker.setScroll(scroll);
-						clearTimeout(worker.timer);
-					}
-				},
-				prev: {
-					enumerable: true,
-					value: function() {
-						const worker = request(this.id);
-						this.pause(true);
-						worker.setTask(worker.index - 1);
-					}
-				},
-				next: {
-					enumerable: true,
-					value: function() {
-						const worker = request(this.id);
-						this.pause(true);
-						worker.setTask(worker.index + 1);
-					}
-				},
-				goto: {
-					enumerable: true,
-					value: function(index) {
-						if (typeof index !== "number") {
-							throw "E5 :: The passed 'index' is not a number.";
-						}
+                        if (this.index === children) {
+                            this.index = 0;
+                        } else if (this.index < 0) {
+                            this.index = children - 1;
+                        }
+                    }
+                },
+                setRotation: {
+                    value: function() {
+                        const item = this.children[this.index];
+                        item.scrollIntoView();
+                    }
+                },
+                setDelay: {
+                    value: function(time) {
+                        const illegal =
+                            typeof time !== "number" ||
+                            time < slide.defaults.delay;
+                        if (illegal) {
+                            time = this.delay;
+                        }
 
-						const worker = request(this.id);
-						this.pause();
-						worker.setIndex(index);
-						worker.setTask();
-					}
-				}
-			}
-		);
+                        this.delay = time;
+                    }
+                },
+                setCallback: {
+                    value: function() {
+                        if (typeof this.handleCallback === "function") {
+                            this.handleCallback(this.index);
+                        }
+                    }
+                },
+                setTimer: {
+                    value: function(cb) {
+                        if (this.auto) {
+                            this.timer = setTimeout(cb, this.delay);
+                        } else {
+                            clearTimeout(this.timer);
+                        }
+                    }
+                },
+                setShim: {
+                    value: function(cb) {
+                        if (this.shim) {
+                            this.setCallback(cb);
+                        } else {
+                            cb();
+                        }
+                    }
+                },
+                setTask: {
+                    value: function(index) {
+                        const self = this;
 
-		const interface = Object.defineProperties(
-			{},
-			{
-				into: {
-					value: function(parent, init, app) {
-						const worker = manager.assign();
-						let task, options;
-						team.push(worker);
+                        self.setDelay();
+                        self.setIndex(index);
+                        self.setRotation();
+                        self.setShim(function() {
+                            self.setTimer(function() {
+                                self.setTask(self.index + 1);
+                            });
+                        });
+                    }
+                }
+            })
+        },
+        api: {
+            value: generate({
+                parent: {
+                    set: function(parent) {
+                        if (typeof parent !== "object") {
+                            throw this.getError("ERR-E");
+                        }
+                        if (parent === null) {
+                            throw this.getError("ERR-P");
+                        }
+                        if (parent.nodeType !== 1) {
+                            throw this.getError("ERR-N");
+                        }
 
-						if (typeof init === "function") {
-							task = init;
-						}
+                        const worker = slide.request(this.id);
 
-						if (typeof init === "object") {
-							task = app;
-							options = init;
-						} else if (typeof app === "object") {
-							options = app;
-						} else {
-							options = {};
-						}
+                        worker.parent = parent;
+                        worker.observe = worker.observer(
+                            worker.parent,
+                            parent.children
+                        );
 
-						const ui = manager.create(api, team.length - 1, parent, options);
-						return task.call(ui);
-					}
-				},
-				proto: {
-					value: function(parameters) {
-						Object.create(api, parameters);
-						Object.keys(parameters).forEach(function(parameter) {
-							Object.defineProperty(api, parameter, {
-								writable: false,
-								configurable: false,
-								enumerable: true,
-								value: parameters[parameter]
-							});
-						});
-					}
-				}
-			}
-		);
+                        this.children = parent.children;
+                    },
+                    get: function() {
+                        const worker = slide.request(this.id);
+                        return worker.parent;
+                    }
+                },
+                children: {
+                    set: function() {
+                        const worker = slide.request(this.id);
+                        worker.children = worker.parent.children;
+                        worker.observe(worker.children);
+                    },
+                    get: function() {
+                        const worker = slide.request(this.id);
+                        return worker.children;
+                    }
+                },
+                isAuto: {
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        return worker.auto;
+                    }
+                },
+                watch: {
+                    value: function(task) {
+                        const worker = slide.request(this.id);
+                        worker.handleCallback = task.bind(this);
+                    }
+                },
+                countChildren: {
+                    value: function() {
+                        return this.children.length;
+                    }
+                },
+                getDelay: {
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        return worker.delay;
+                    }
+                },
+                setDelay: {
+                    value: function(delay) {
+                        const worker = slide.request(this.id);
+                        worker.setDelay(delay);
+                    }
+                },
+                setError: {
+                    value: function(code, message) {
+                        if (
+                            typeof code === "string" &&
+                            typeof message === "string"
+                        ) {
+                            Object.defineProperty(slide.errors, code, {
+                                value: message
+                            });
+                        } else {
+                            this.getError("ERR-M");
+                        }
+                    }
+                },
+                getError: {
+                    value: function(code) {
+                        if (typeof code === "string") {
+                            code = "ERR-C";
+                        }
 
-		return interface;
-	};
+                        const error =
+                            slide.errors[code] || slide.defaults.error;
+                        throw code + " :: " + error;
+                    }
+                },
+                play: {
+                    enumerable: true,
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        this.pause();
+                        worker.auto = true;
+                        worker.setTask(worker.index + 1);
+                    }
+                },
+                pause: {
+                    enumerable: true,
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        worker.auto = false;
+                        clearTimeout(worker.timer);
+                    }
+                },
+                prev: {
+                    enumerable: true,
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        this.pause();
+                        worker.setTask(worker.index - 1);
+                    }
+                },
+                next: {
+                    enumerable: true,
+                    value: function() {
+                        const worker = slide.request(this.id);
+                        this.pause();
+                        worker.setTask(worker.index + 1);
+                    }
+                },
+                goto: {
+                    enumerable: true,
+                    value: function(index) {
+                        if (typeof index !== "number") {
+                            this.getError("ERR-X");
+                        }
 
-	if (typeof global.Slide !== "object") {
-		Object.defineProperty(global, "Slide", {
-			value: slide(),
-			writable: false,
-			configurable: false
-		});
-	} else {
-		throw "E1 :: The 'Slide' feature has already been evaluated.";
-	}
+                        const worker = slide.request(this.id);
+                        this.pause();
+                        worker.setIndex(index);
+                        worker.setTask();
+                    }
+                }
+            })
+        },
+        interface: {
+            value: generate({
+                into: {
+                    value: function(parent, init, app) {
+                        const worker = slide.manager.assign();
+                        let task = app;
+                        let options = {};
+
+                        slide.team.push(worker);
+
+                        if (typeof init === "function") {
+                            task = init;
+                        }
+
+                        if (typeof init === "object") {
+                            options = init;
+                        } else if (typeof app === "object") {
+                            options = app;
+                        }
+
+                        const ui = slide.manager.create(
+                            slide.api,
+                            slide.team.length - 1,
+                            parent,
+                            options
+                        );
+
+                        return task.call(ui);
+                    }
+                },
+                proto: {
+                    value: function(parameters) {
+                        Object.create(slide.api, parameters);
+                        Object.keys(parameters).forEach(function(parameter) {
+                            Object.defineProperty(slide.api, parameter, {
+                                writable: false,
+                                configurable: false,
+                                enumerable: true,
+                                value: parameters[parameter]
+                            });
+                        });
+                    }
+                }
+            })
+        }
+    });
+
+    if (typeof global.Slide !== "object") {
+        Object.defineProperty(global, "Slide", {
+            value: slide.interface,
+            writable: false,
+            configurable: false
+        });
+    }
 })(window);
