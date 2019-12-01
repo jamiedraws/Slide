@@ -23,16 +23,24 @@
                 }
             })
         },
+        docs: {
+            value: generate({
+                error: {
+                    value:
+                        "https://github.com/jamiedraws/Slide/blob/master/slide/javascript.md#api-errors"
+                }
+            })
+        },
         errors: {
             value: generate({
                 "ERR-E": {
-                    value: "The passed 'parent' must be an element."
+                    value: "The passed 'element' must be an element."
                 },
                 "ERR-P": {
-                    value: "The passed 'parent' could not be found."
+                    value: "The passed 'element' could not be found."
                 },
                 "ERR-N": {
-                    value: "The passed 'parent' is not an element."
+                    value: "The passed 'element' is not a node element."
                 },
                 "ERR-X": {
                     value: "The passed 'index' is not a number."
@@ -54,7 +62,6 @@
                 return this.team[id];
             }
         },
-        makeArray: {},
         observer: {
             value: function(parent, children, cb) {
                 if (window.hasOwnProperty("IntersectionObserver")) {
@@ -95,6 +102,20 @@
         },
         manager: {
             value: generate({
+                config: {
+                    value: function(options) {
+                        const self = this;
+
+                        if (typeof options === "object") {
+                            Object.keys(options).forEach(function(option) {
+                                Object.defineProperty(self, option, {
+                                    enumerable: true,
+                                    value: options[option]
+                                });
+                            });
+                        }
+                    }
+                },
                 create: {
                     value: function(api, id, parent, config) {
                         const self = Object.create(api);
@@ -115,15 +136,7 @@
 
                         self.name = parent;
 
-                        if (typeof config === "object") {
-                            Object.keys(config).forEach(function(option) {
-                                const c = config[option];
-                                Object.defineProperty(self, option, {
-                                    enumerable: true,
-                                    value: c
-                                });
-                            });
-                        }
+                        this.config.call(self, config);
 
                         return self;
                     }
@@ -230,15 +243,7 @@
             value: generate({
                 parent: {
                     set: function(parent) {
-                        if (typeof parent !== "object") {
-                            this.getError("ERR-E");
-                        }
-                        if (parent === null) {
-                            this.getError("ERR-P");
-                        }
-                        if (parent.nodeType !== 1) {
-                            this.getError("ERR-N");
-                        }
+                        this.validateNodeElement(parent);
 
                         const worker = slide.request(this.id);
 
@@ -253,6 +258,20 @@
                     get: function() {
                         const worker = slide.request(this.id);
                         return worker.parent;
+                    }
+                },
+                validateNodeElement: {
+                    value: function(element) {
+                        if (typeof element !== "object") {
+                            this.getError("ERR-E");
+                        }
+                        if (element === null) {
+                            this.getError("ERR-P");
+                        }
+                        if (element.nodeType !== 1) {
+                            this.getError("ERR-N");
+                        }
+                        return true;
                     }
                 },
                 children: {
@@ -311,13 +330,29 @@
                 },
                 getError: {
                     value: function(code) {
-                        if (typeof code === "string") {
+                        if (typeof code !== "string") {
                             code = "ERR-C";
                         }
 
                         const error =
                             slide.errors[code] || slide.defaults.error;
-                        throw code + " :: " + error;
+
+                        throw {
+                            code: code,
+                            error: error,
+                            help: slide.docs.error
+                        };
+                    }
+                },
+                hasError: {
+                    value: function(code) {
+                        return slide.errors.hasOwnProperty(code);
+                    }
+                },
+                config: {
+                    value: function(options) {
+                        const worker = slide.request(this.id);
+                        worker.config.call(this, options);
                     }
                 },
                 play: {
