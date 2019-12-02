@@ -4,9 +4,11 @@
     };
 
     const toArray = function(collection) {
-        const store = [];
-        const ar = store.slice.call(collection);
-        return ar;
+        if (collection !== null && typeof collection !== "undefined") {
+            const store = [];
+            const ar = store.slice.call(collection);
+            return ar;
+        }
     };
 
     const slide = generate({
