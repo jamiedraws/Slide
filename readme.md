@@ -12,11 +12,10 @@ In order to support this mission, it is Slide's vision to aim for best practices
 
 Should you choose to use Slide as your carousel, you will be able to:
 
-- Lay out your HTML structure freely
-- Opt-in with the presentation and functionality you need
-- Control the duration, delay and transition using CSS
-- Program freely in a private scope
-- Describe your content exactly how you need it
+-   Lay out your HTML structure freely
+-   Opt-in with the presentation and functionality you need
+-   Program freely in a private scope
+-   Describe your content exactly how you need it
 
 These values support Slide's mission and vision. Slide is free of 3rd party dependencies and aims to be as clear and as simplified as possible.
 
@@ -26,16 +25,16 @@ If this sounds like the kind of carousel that you'd like to use, please make sur
 
 In order to attain Slide's mission, there are standards that an author should strive for. The standards are as follows in that Slide should:
 
-- Operate as a basic carousel without any JavaScript
-- Operate as a basic carousel when JavaScript is disabled
-- Render and animate within a 60 FPS threshold
-- Degrade gracefully when resources are absent
+-   Operate as a basic carousel without any JavaScript
+-   Operate as a basic carousel when JavaScript is disabled
+-   Render and animate within a 60 FPS threshold
+-   Degrade gracefully when resources are absent
 
 Most importantly though, Slide should never by any means:
 
-- Violate any of the web accessibility guidelines
-- Offer any mechanism to the user that won't work
-- Block the user from completing their objective
+-   Violate any of the web accessibility guidelines
+-   Offer any mechanism to the user that won't work
+-   Block the user from completing their objective
 
 If you have objections to any of the standards, Slide may not be the right carousel to suit your needs.
 
@@ -45,17 +44,17 @@ Otherwise, if you acknowledge and are willing to meet these standards head on, l
 
 Let's start off by checking out the demo carousel that we'll set up by following the tutorial below.
 
-[Open Working Demo](https://jamiedraws.github.io/demo/slide/ "See a working demo of the Slide carousel")
+[Open Working Demo](https://jamiedraws.github.io/ "See a working demo of the Slide carousel")
 
 First, let's test Slide carousel out. As the author, what we should be looking for are the essential working mechanisms that make a carousel.
 
 These include offering a:
 
-- Previous button
-- Pause button
-- Play button
-- Next button
-- Set of thumbnail buttons
+-   Previous button
+-   Pause button
+-   Play button
+-   Next button
+-   Set of thumbnail buttons
 
 Next, let's explore behind the scenes and learn how to set up the carousel from scratch.
 
@@ -67,26 +66,26 @@ To set up a working carousel on your webpage, let's start by adding our HTML cod
 
 ```html
 <div class="slide">
-	<div id="alpha" class="slide__into">
-		<img
-			id="alpha-0"
-			src="images/led-music-instruments.jpg"
-			class="slide__item"
-			alt="woman standing watching LED light musical instrument"
-		/>
-		<img
-			id="alpha-1"
-			src="images/woman-holding-heart.jpg"
-			class="slide__item"
-			alt="woman holding lit heart"
-		/>
-		<img
-			id="alpha-2"
-			src="images/hot-air-balloons.jpg"
-			class="slide__item"
-			alt="man taking photo of hot air balloons"
-		/>
-	</div>
+    <div id="alpha" class="slide__into">
+        <img
+            id="alpha-0"
+            src="images/led-music-instruments.jpg"
+            class="slide__item"
+            alt="woman standing watching LED light musical instrument"
+        />
+        <img
+            id="alpha-1"
+            src="images/woman-holding-heart.jpg"
+            class="slide__item"
+            alt="woman holding lit heart"
+        />
+        <img
+            id="alpha-2"
+            src="images/hot-air-balloons.jpg"
+            class="slide__item"
+            alt="man taking photo of hot air balloons"
+        />
+    </div>
 </div>
 ```
 
@@ -130,30 +129,30 @@ Let's start by adding the HTML template that will lay out the thumbnails to our 
 
 ```html
 <nav class="slide__thumbnails">
-	<a
-		href="#alpha-0"
-		class="slide__thumbnail"
-		title="Select the first slide"
-		data-slide-index="0"
-	>
-		<span>1</span>
-	</a>
-	<a
-		href="#alpha-1"
-		class="slide__thumbnail"
-		title="Select the second slide"
-		data-slide-index="1"
-	>
-		<span>2</span>
-	</a>
-	<a
-		href="#alpha-2"
-		class="slide__thumbnail"
-		title="Select the last slide"
-		data-slide-index="2"
-	>
-		<span>3</span>
-	</a>
+    <a
+        href="#alpha-0"
+        class="slide__thumbnail"
+        title="Select the first slide"
+        data-slide-index="0"
+    >
+        <span>1</span>
+    </a>
+    <a
+        href="#alpha-1"
+        class="slide__thumbnail"
+        title="Select the second slide"
+        data-slide-index="1"
+    >
+        <span>2</span>
+    </a>
+    <a
+        href="#alpha-2"
+        class="slide__thumbnail"
+        title="Select the last slide"
+        data-slide-index="2"
+    >
+        <span>3</span>
+    </a>
 </nav>
 ```
 
@@ -198,11 +197,11 @@ Let's add a `<noscript>` element right after the `<link>` elements that request 
 
 ```html
 <noscript>
-	<style>
-		.slide__js {
-			display: none;
-		}
-	</style>
+    <style>
+        .slide__js {
+            display: none;
+        }
+    </style>
 </noscript>
 ```
 
@@ -245,36 +244,36 @@ Let's start by adding the HTML template that will display the basic controls for
 
 ```html
 <div class="slide__js">
-	<nav class="slide__nav">
-		<button
-			aria-label="Select the previous slide"
-			class="slide__prev"
-			type="button"
-		>
-			Prev
-		</button>
-		<button
-			aria-label="Play through all slides"
-			class="slide__play"
-			type="button"
-		>
-			Play
-		</button>
-		<button
-			aria-label="Pause on the current slide"
-			class="slide__pause"
-			type="button"
-		>
-			Pause
-		</button>
-		<button
-			aria-label="Select the next slide"
-			class="slide__next"
-			type="button"
-		>
-			Next
-		</button>
-	</nav>
+    <nav class="slide__nav">
+        <button
+            aria-label="Select the previous slide"
+            class="slide__prev"
+            type="button"
+        >
+            Prev
+        </button>
+        <button
+            aria-label="Play through all slides"
+            class="slide__play"
+            type="button"
+        >
+            Play
+        </button>
+        <button
+            aria-label="Pause on the current slide"
+            class="slide__pause"
+            type="button"
+        >
+            Pause
+        </button>
+        <button
+            aria-label="Select the next slide"
+            class="slide__next"
+            type="button"
+        >
+            Next
+        </button>
+    </nav>
 </div>
 ```
 
@@ -299,58 +298,58 @@ Next, let's open the `my-carousel.js` JavaScript file and let's add the template
 
 ```javascript
 Slide.into(
-	document.querySelector(".slide__into"),
-	{
-		pauseButton: document.querySelector(".slide__pause"),
-		playButton: document.querySelector(".slide__play"),
-		prevButton: document.querySelector(".slide__prev"),
-		nextButton: document.querySelector(".slide__next"),
-		thumbnails: document.querySelector(".slide__thumbnails")
-	},
-	function() {
-		const self = this;
+    document.querySelector(".slide__into"),
+    {
+        pauseButton: document.querySelector(".slide__pause"),
+        playButton: document.querySelector(".slide__play"),
+        prevButton: document.querySelector(".slide__prev"),
+        nextButton: document.querySelector(".slide__next"),
+        thumbnails: document.querySelector(".slide__thumbnails")
+    },
+    function() {
+        const self = this;
 
-		// add support for previous slide button
-		self.prevButton.addEventListener("click", function() {
-			self.prev();
-		});
+        // add support for previous slide button
+        self.prevButton.addEventListener("click", function() {
+            self.prev();
+        });
 
-		// add support for next slide button
-		self.nextButton.addEventListener("click", function() {
-			self.next();
-		});
+        // add support for next slide button
+        self.nextButton.addEventListener("click", function() {
+            self.next();
+        });
 
-		// add support for autoplay button
-		self.playButton.addEventListener("click", function() {
-			self.play();
-		});
+        // add support for autoplay button
+        self.playButton.addEventListener("click", function() {
+            self.play();
+        });
 
-		// add support for pause button
-		self.pauseButton.addEventListener("click", function() {
-			self.pause();
-		});
+        // add support for pause button
+        self.pauseButton.addEventListener("click", function() {
+            self.pause();
+        });
 
-		// add support for thumbnail button
-		self.thumbnails.addEventListener("click", function(event) {
-			event.preventDefault();
-			const thumbnail = event.target;
-			const index = parseInt(thumbnail.dataset.slideIndex);
-			self.goto(index);
-		});
+        // add support for thumbnail button
+        self.thumbnails.addEventListener("click", function(event) {
+            event.preventDefault();
+            const thumbnail = event.target;
+            const index = parseInt(thumbnail.dataset.slideIndex);
+            self.goto(index);
+        });
 
-		// add observer for each slide rotation
-		self.watch(function(index, finish) {
-			// display the selected thumbnail button using CSS
-			self.selectThumbnail(index);
+        // add observer for each slide rotation
+        self.watch(function(index, finish) {
+            // display the selected thumbnail button using CSS
+            self.selectThumbnail(index);
 
-			// allow screen reader to annouce current slide
-			self.updateSlideVisibility(index);
-			self.observeLiveRegion();
+            // allow screen reader to annouce current slide
+            self.updateSlideVisibility(index);
+            self.observeLiveRegion();
 
-			// finish the rotation task
-			finish();
-		});
-	}
+            // finish the rotation task
+            finish();
+        });
+    }
 );
 ```
 
@@ -366,11 +365,11 @@ The `Slide.into` method takes the HTML element that represents the carousel and 
 
 The carousel should now be able to:
 
-- Play through each slide automatically using the `play` button
-- Pause on the current slide using the `pause` button
-- Forward to the next slide using the `next` button
-- Reverse to the last slide using the `prev` button
-- Jump to a specific slide using the `thumbnail` buttons
+-   Play through each slide automatically using the `play` button
+-   Pause on the current slide using the `pause` button
+-   Forward to the next slide using the `next` button
+-   Reverse to the last slide using the `prev` button
+-   Jump to a specific slide using the `thumbnail` buttons
 
 > ### Accessibility Tip
 >
