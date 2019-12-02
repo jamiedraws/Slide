@@ -19,14 +19,14 @@ Slide.proto({
             const name = "slide__thumbnail--is-selected";
             const index = "[data-slide-index='" + id + "']";
 
-            const thumbnails = this.thumbnails.querySelectorAll("." + name);
+            const elements = this.thumbnails.querySelectorAll("." + name);
             const thumbnail = this.thumbnails.querySelector(index);
+            const thumbnails = this.toArray(elements);
 
-            if (thumbnails.length > 0) {
-                thumbnails.forEach(function(thumbnail) {
-                    thumbnail.classList.remove(name);
-                });
-            }
+            thumbnails.forEach(function(thumbnail) {
+                thumbnail.classList.remove(name);
+            });
+
             thumbnail.classList.add(name);
         }
     },
